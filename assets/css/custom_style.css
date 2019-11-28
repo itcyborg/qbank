@@ -1,0 +1,63 @@
+.header{
+	height:70px;
+	background-color: gray;
+	width:100%;
+	top:0;
+	left:0;
+	right:0;
+	position:fixed;
+}
+.footer{
+	height:70px;
+	background-color: gray;
+	width:100%;
+	bottom:0;
+	right: 0;
+	left: 0;
+	position: absolute;
+}
+.main{
+	margin: 30px;
+	top:70px;
+	width:100%;
+	left:0;
+	right:0;
+	position: absolute;
+}
+.main_center{
+	margin-left:25%;
+	margin-right: 25%;
+}
+
+#form-control{
+	border-right: 0;
+	border-left:0;
+	border-top:0;
+	width: 60%;
+	height:40px;
+	padding:5px;
+	text-align: center;
+	color:#a23333;
+}
+
+.username_group{
+	padding: 20px;
+}
+
+.password_group{
+	padding: 20px;
+}
+
+.form_submit{
+	clear:all;
+	padding: 30px;
+	align-content: center;
+}
+
+.form_submit button{
+	width:60%;
+	height:40px;
+	background-color: orange;
+	border:none;
+	border-radius: 5px;
+}
