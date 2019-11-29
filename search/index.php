@@ -2,7 +2,7 @@
 session_start();
 // error_reporting(0);
 
-$output="";
+$output=[];
 
 include '../system/conn.php';
 
@@ -15,17 +15,19 @@ if(isset($_GET['search_query'])){
 	$query="SELECT * FROM question_tbl WHERE Question LIKE '%".$search_query."%'";
 	
 	$searchwiki=str_replace(" ", "+", $search_query);
-	
-	if(@$wiki=file_get_contents("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&indexpageids=1&titles=".$searchwiki."&srsearch=".$searchwiki."&srlimit=100&srwhat=text&srprop=snippet&prop=info&inprop=url")){
-		
-		$error=true;
-		
-	}
-	else{
-		
-		$error=false;
-		
-	}
+
+    if(@$wiki=file_get_contents("http://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=".$searchwiki."&format=json")){
+        $wiki=json_decode($wiki);
+    }
+    else{
+        $error=false;
+    }
+    if(@$archive=file_get_contents("https://archive.org/advancedsearch.php?q=".$searchwiki."~&description&title&source&output=json&rows=20")){
+        $archive=json_decode($archive);
+        $error=true;
+    }else{
+        $error=false;
+    }
 	
 	if($res=$conn->query($query)){
 		
@@ -129,9 +131,34 @@ if(isset($_GET['search_query'])){
 	}
 	else{
 		
-		$output="<div class='output alert alert-info text-center'>No results found from Local</div>";
+//		$output[]="<div class='output alert alert-info text-center'>No results found from Local</div>";
 		
 	}
+    foreach ($wiki->query->search as $key => $value) {
+        $output[] = (object)array(
+            'link' => "http://en.wikipedia.org/wiki/" . $value->title,
+            'title' => $value->title,
+            'source' => "Wikipedia.org",
+            'snippet' => substr($value->snippet, 0, 200)
+        );
+    }
+//    die(var_dump($archive));
+    foreach ($archive->response->docs as $doc) {
+        if (isset($doc->description)) {
+            $snippet = $doc->description;
+        } else {
+            $snippet = "";
+        }
+        if (is_array($snippet)) {
+            $snippet = $snippet[0];
+        }
+        $output[] = (object)array(
+            'link' => "https://www.archive.org/details/" . $doc->identifier,
+            'title' => $doc->title,
+            'source' => "Archive.org",
+            'snippet' => substr($snippet, 0, 250) . "..."
+        );
+    }
 	
 }
 else{
@@ -221,7 +248,6 @@ if(isset($_GET['result'])){
 		<div class="container">
 			<div class="col-md-12">
 				<?php
-echo $output;
 
 ?>
 				<hr>
@@ -229,17 +255,15 @@ echo $output;
 	?>
 				<p><i>More results from other sources</i></p>
 				<?php
-$wiki=json_decode($wiki);
+//                    $wiki=json_decode($wiki);
+                    foreach ($output as $item) {
+                        $title=$item->title;
+                        $link=$item->link;
+                        $snippet=$item->snippet;
+                        $source=$item->source;
+                        echo "<h6><a href='$link' target='_blank'>$title</a></h6><br> Source:<small><i>$source</i></small><p>$snippet</p>";
 
-foreach ($wiki->query->search as $key=>$value) {
-	
-	echo "<h6><a href='http://en.wikipedia.org/wiki/".$value->title."' target='_blank'>".$value->title."</a></h6>";
-	
-	echo "<small><i>Source: wikipedia</i></small><br>";
-	
-	echo $value->snippet."<br>";
-	
-}
+                    }
 
 ?>
 				<?php
