@@ -204,7 +204,7 @@ if(isset($_GET['result'])){
 <!DOCTYPE html>
 <html>
 <head>
-	<title>ENLIGHTEN KENYA</title>
+	<title>ILS</title>
 	<link href="../assets/dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../assets/dist/css/flat-ui.css">
 </head>
@@ -221,15 +221,8 @@ if(isset($_GET['result'])){
 		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
 		      <span class="sr-only">Menu</span>
 		    </button>
-		    <a class="navbar-brand" href="../">ENLIGHTEN</a>
+		    <a class="navbar-brand" href="../">INTEGRATED LEARNING SYSTEM</a>
 		  </div>
-		  <div class="collapse navbar-collapse" id="navbar-collapse-01">
-		    <ul class="nav navbar-nav navbar-right">
-		      <li class="active"><a href="">Home</a></li>
-		      <li><a href="#login">Login</a></li>
-		      <li><a href="#register">Register</a></li>
-		    </ul>
-		  </div><!-- /.navbar-collapse -->
 		</nav><!-- /navbar -->
 	</div>
 	<div class="col-md-offset-3 col-md-6">
